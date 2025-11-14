@@ -1,0 +1,102 @@
+import json
+from fuzzywuzzy import fuzz
+from flask import Flask, request, jsonify, render_template
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from peft import PeftModel
+import os
+
+app = Flask(__name__, template_folder="templates")
+
+# ====== Load FAQ Data ======
+FAQ_FILE = "ai.json"
+with open(FAQ_FILE, "r", encoding="utf-8") as file:
+    faq_data = json.load(file)
+
+# Normalize FAQ data
+normalized_faq = []
+for item in faq_data:
+    if "question" in item and "answer" in item:
+        normalized_faq.append(item)
+    elif "topic" in item and "definition" in item:
+        q = f"What is {item['topic']}?"
+        a = item["definition"]
+        if "code" in item:
+            a += f"\n\n👉 Example Code:\n{item['code']}"
+        if "output" in item:
+            a += f"\n\n✅ Output:\n{item['output']}"
+        if "explanation" in item:
+            a += f"\n\n📖 Explanation:\n{item['explanation']}"
+        normalized_faq.append({"question": q, "answer": a})
+
+faq_data = normalized_faq
+
+# ====== Load Your Fine-tuned GPT-Neo Model ======
+MODEL_DIR = "/mnt/data/extracted_model/ft-model"
+
+print("🔧 Loading tokenizer and model...")
+tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
+
+# Load base GPT-Neo model — change to your base (e.g., EleutherAI/gpt-neo-1.3B)
+base_model_name = "EleutherAI/gpt-neo-125M"
+base_model = AutoModelForCausalLM.from_pretrained(base_model_name, torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32)
+
+# Load LoRA adapter
+model = PeftModel.from_pretrained(base_model, MODEL_DIR)
+model.eval()
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model.to(device)
+print(f"✅ Model loaded on {device}")
+
+# ====== Response Generator ======
+def generate_response(prompt, max_new_tokens=200):
+    inputs = tokenizer(prompt, return_tensors="pt").to(device)
+    with torch.no_grad():
+        outputs = model.generate(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            temperature=0.7,
+            top_p=0.9,
+            do_sample=True
+        )
+    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+# ====== Main Bot Logic ======
+def get_answer(user_query):
+    best_match = None
+    highest_score = 0
+
+    # Search FAQ
+    for item in faq_data:
+        score = fuzz.partial_ratio(user_query.lower(), item["question"].lower())
+        if score > highest_score:
+            highest_score = score
+            best_match = item["answer"]
+
+    if highest_score > 70:
+        return best_match
+
+    # Otherwise use model
+    try:
+        response = generate_response(user_query)
+        return response
+    except Exception as e:
+        return f"⚠️ Error generating response: {str(e)}"
+
+# ====== Routes ======
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+@app.route("/ask", methods=["POST"])
+def ask_bot():
+    data = request.json
+    user_query = data.get("question", "")
+    answer = get_answer(user_query)
+    return jsonify({"answer": answer})
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 5000))
+    print(f"🤖 Web Bot running at http://127.0.0.1:{port}")
+    app.run(host="0.0.0.0", port=port, debug=True)
