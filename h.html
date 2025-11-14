@@ -1,0 +1,230 @@
+
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Profile - MITS Student Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      --card-bg: rgba(255, 255, 255, 0.7);
+      --accent-color: #0077b6;
+      --accent-dark: #023e8a;
+      --text-color: #1e1e1e;
+      --label-color: #555;
+      --border-color: rgba(255, 255, 255, 0.4);
+      --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      color: var(--text-color);
+    }
+
+    main.container {
+      max-width: 1100px;
+      width: 100%;
+      padding: 2.5rem;
+      border-radius: 1.5rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 30px var(--shadow-color);
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .profile-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-header .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: url('https://i.imgur.com/8Km9tLL.png') center/cover no-repeat;
+      margin: 0 auto 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .profile-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      text-align: left;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-item strong {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--label-color);
+      letter-spacing: 1px;
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+    }
+
+    .profile-item span {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    #editButton {
+      display: block;
+      margin: 3rem auto 0;
+      padding: 1rem 2.5rem;
+      font-size: 1rem;
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(0, 119, 182, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: background-color 0.3s ease, transform 0.2s;
+    }
+
+    #editButton:hover {
+      background-color: var(--accent-dark);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      main.container {
+        padding: 2rem;
+      }
+
+      .profile-header h1 {
+        font-size: 2rem;
+      }
+
+      .profile-item {
+        padding: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container" role="main" aria-label="Student Profile Information">
+    <div class="profile-header">
+      <div class="avatar" aria-hidden="true"></div>
+      <h1>Student Profile</h1>
+    </div>
+    <section class="profile-info" aria-label="Student Profile Details">
+      <div class="profile-item"><strong>Name:</strong><span id="studentName">Loading...</span></div>
+      <div class="profile-item"><strong>Student ID:</strong><span id="studentID">Loading...</span></div>
+      <div class="profile-item"><strong>Program:</strong><span id="program">Loading...</span></div>
+      <div class="profile-item"><strong>Department:</strong><span id="department">Loading...</span></div>
+      <div class="profile-item"><strong>Year:</strong><span id="year">Loading...</span></div>
+      <div class="profile-item"><strong>Section:</strong><span id="section">Loading...</span></div>
+      <div class="profile-item"><strong>Email:</strong><span id="email">Loading...</span></div>
+      <div class="profile-item"><strong>Phone:</strong><span id="phone">Loading...</span></div>
+      <div class="profile-item"><strong>Bus Pass Number:</strong><span id="busPassNumber">Loading...</span></div>
+      <div class="profile-item"><strong>Valid From:</strong><span id="validFrom">Loading...</span></div>
+      <div class="profile-item"><strong>Valid To:</strong><span id="validTo">Loading...</span></div>
+      <div class="profile-item"><strong>Route Name:</strong><span id="routeId">Loading...</span></div>
+      <div class="profile-item"><strong>Stop Name:</strong><span id="stopId">Loading...</span></div>
+    </section>
+    <button id="editButton" aria-label="Edit Profile">✏️ Edit Profile</button>
+  </main>
+
+  <!-- JavaScript remains untouched -->
+  
+  <!-- JavaScript remains untouched -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = value ?? 'N/A';
+        }
+      };
+      function formatDate(dateStr) {
+        if (!dateStr) return 'N/A';
+        const d = new Date(dateStr);
+        if (isNaN(d)) return 'N/A';
+        return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+      }
+      async function fetchStudentProfile() {
+        try {
+          const response = await fetch('/api/students/me', {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'include'
+          });
+          if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(`Failed to fetch profile: ${response.status} ${response.statusText} - ${errText}`);
+          }
+          const data = await response.json();
+          if (!data.success || !data.student) {
+            const msg = data.message || 'Failed to retrieve student data';
+            throw new Error(msg);
+          }
+          const student = data.student;
+          setText('studentName', student.studentName);
+          setText('studentID', student.studentId);
+          setText('program', student.program);
+          setText('department', student.department);
+          setText('year', student.year);
+          setText('section', student.section);
+          setText('email', student.email);
+          setText('phone', student.phone);
+          setText('busPassNumber', student.busPassNumber);
+          setText('validFrom', formatDate(student.validFrom));
+          setText('validTo', formatDate(student.validTo));
+          setText('routeId', student.routeId);
+          setText('stopId', student.stopId);
+        } catch {
+          alert('Could not load student profile. Please try again later.');
+          document.querySelectorAll('.profile-info span').forEach(span => span.textContent = 'N/A');
+        }
+      }
+      fetchStudentProfile();
+      const editButton = document.getElementById('editButton');
+      if (editButton) {
+        editButton.addEventListener('click', () => {
+          window.location.href = 'student-profile-edit.html';
+        });
+      }
+      document.documentElement.classList.remove('loading');
+    });
+  </script>
+</body>
+</html>
