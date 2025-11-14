@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edit Student Profile - MITS Student Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --card-bg: #f9f9f9;
+      --accent-color: #0077b6;
+      --accent-dark: #023e8a;
+      --text-color: #1e1e1e;
+      --label-color: #555;
+      --border-color: #e0e0e0;
+      --shadow-color: rgba(0, 0, 0, 0.05);
+      --input-focus: #5e60ce;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      color: var(--text-color);
+    }
+
+    main.container {
+      max-width: 1000px;
+      width: 100%;
+      padding: 2rem;
+      border-radius: 1rem;
+      background: var(--bg-color);
+      box-shadow: 0 8px 30px var(--shadow-color);
+      border: 1px solid var(--border-color);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #5e60ce;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      font-weight: 500;
+      color: var(--label-color);
+    }
+
+    label span {
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-color);
+    }
+
+    select,
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="file"] {
+      padding: 0.8rem;
+      font-size: 0.95rem;
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      font-family: 'Roboto', sans-serif;
+      background: var(--card-bg);
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    select:disabled,
+    input:disabled {
+      background: #f0f0f0;
+      color: #999;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    select:focus,
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="date"]:focus,
+    input[type="file"]:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px rgba(94, 96, 206, 0.1);
+      background: white;
+      transform: translateY(-2px);
+    }
+
+    input[readonly] {
+      background: #f0f0f0;
+      color: #666;
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+
+    small.file-info {
+      display: block;
+      margin-top: 0.5rem;
+      color: var(--label-color);
+      font-size: 0.85rem;
+      font-weight: 400;
+    }
+
+    .buttons {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    button {
+      padding: 0.8rem 2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      min-width: 150px;
+    }
+
+    button#saveBtn {
+      background: linear-gradient(135deg, #5e60ce, #7209b7);
+      box-shadow: 0 4px 12px rgba(94, 96, 206, 0.3);
+    }
+
+    button#saveBtn:hover {
+      background: linear-gradient(135deg, #4c4fb8, #6207a3);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(94, 96, 206, 0.4);
+    }
+
+    button#cancelBtn {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+    }
+
+    button#cancelBtn:hover {
+      background: linear-gradient(135deg, #b91c1c, #991b1b);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      main.container {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      form {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .buttons {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      button {
+        min-width: unset;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 1rem;
+      }
+
+      main.container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container" role="main" aria-label="Edit Student Profile">
+    <h1>Edit Student Profile</h1>
+
+    <form id="profileForm" novalidate>
+      <label><span>Name:</span>
+        <input type="text" id="studentName" name="studentName" required />
+      </label>
+
+      <label><span>Student ID (read-only):</span>
+        <input type="text" id="studentId" name="studentId" readonly />
+      </label>
+
+      <label><span>Program:</span>
+        <select id="program" name="program" required>
+          <option value="" disabled selected>Select Program</option>
+        </select>
+      </label>
+
+      <label><span>Department:</span>
+        <select id="department" name="department" required disabled>
+          <option value="" disabled selected>Select Department</option>
+        </select>
+      </label>
+
+      <label><span>Year:</span>
+        <select id="year" name="year" required disabled>
+          <option value="" disabled selected>Select Year</option>
+        </select>
+      </label>
+
+      <label><span>Section:</span>
+        <select id="section" name="section" required disabled>
+          <option value="" disabled selected>Select Section</option>
+        </select>
+      </label>
+
+      <label><span>Email:</span>
+        <input type="email" id="email" name="email" required />
+      </label>
+
+      <label><span>Phone:</span>
+        <input type="tel" id="phone" name="phone" required />
+      </label>
+
+      <label><span>Bus Pass Number:</span>
+        <input type="text" id="busPassNumber" name="busPassNumber" required />
+      </label>
+
+      <label><span>Valid From:</span>
+        <input type="date" id="validFrom" name="validFrom" required />
+      </label>
+
+      <label><span>Valid To:</span>
+        <input type="date" id="validTo" name="validTo" required />
+      </label>
+
+      <label><span>Bus Pass File:</span>
+        <input type="file" id="busPassFile" name="busPassFile" accept=".pdf,.png,.jpg,.jpeg" />
+        <small id="uploadedBusPassFileName" class="file-info"></small>
+      </label>
+
+      <label><span>Route ID (read-only):</span>
+        <input type="text" id="routeId" name="routeId" readonly />
+      </label>
+
+      <label><span>Stop ID (read-only):</span>
+        <input type="text" id="stopId" name="stopId" readonly />
+      </label>
+
+      <div class="buttons">
+        <button type="submit" id="saveBtn">💾 Save Changes</button>
+        <button type="button" id="cancelBtn">← Cancel</button>
+      </div>
+    </form>
+  </main>
+
+<script>
+  // Options objects per your provided selects
+  const deptOpts = {
+    'B.Tech': ['CSE', 'CSE-AI', 'CSE-AIML', 'CSE-DS', 'CSE-CS', 'ECE', 'EEE', 'Mech', 'Civil'],
+    'MBA': ['MBA-X', 'MBA-Y', 'MBA-Z'],
+    'MCA': ['MCA-A', 'MCA-B', 'MCA-C']
+  };
+  const yearOpts = {
+    'B.Tech': ['I', 'II', 'III', 'IV'],
+    'MBA': ['I', 'II'],
+    'MCA': ['I', 'II']
+  };
+  const sectionOpts = {
+    'B.Tech': ['A','B','C','D','E','F','G'],
+    'MBA': ['A','B','C'],
+    'MCA': ['A','B','C']
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('profileForm');
+
+    // Form elements
+    const programSelect = form.program;
+    const departmentSelect = form.department;
+    const yearSelect = form.year;
+    const sectionSelect = form.section;
+
+    const studentNameInput = form.studentName;
+    const studentIdInput = form.studentId;
+    const emailInput = form.email;
+    const phoneInput = form.phone;
+    const busPassNumberInput = form.busPassNumber;
+    const validFromInput = form.validFrom;
+    const validToInput = form.validTo;
+    const routeIdInput = form.routeId;
+    const stopIdInput = form.stopId;
+
+    const busPassFileInput = document.getElementById('busPassFile');
+    const uploadedBusPassFileName = document.getElementById('uploadedBusPassFileName');
+
+    // Populate the Program options dropdown
+    function populateProgramOptions() {
+      Object.keys(deptOpts).forEach(program => {
+        const option = document.createElement('option');
+        option.value = program;
+        option.textContent = program;
+        programSelect.appendChild(option);
+      });
+    }
+
+    // Populate dependent selects (department, year, section)
+    function populateOptions(selectElem, options) {
+      selectElem.innerHTML = '<option value="" disabled selected>Select</option>';
+      options.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt;
+        option.textContent = opt;
+        selectElem.appendChild(option);
+      });
+      selectElem.disabled = false;
+    }
+
+    function resetSelect(selectElem) {
+      selectElem.innerHTML = '<option value="" disabled selected>Select</option>';
+      selectElem.disabled = true;
+    }
+
+    programSelect.addEventListener('change', () => {
+      const selectedProgram = programSelect.value;
+      if (selectedProgram && deptOpts[selectedProgram]) {
+        populateOptions(departmentSelect, deptOpts[selectedProgram]);
+        populateOptions(yearSelect, yearOpts[selectedProgram]);
+        populateOptions(sectionSelect, sectionOpts[selectedProgram]);
+      } else {
+        resetSelect(departmentSelect);
+        resetSelect(yearSelect);
+        resetSelect(sectionSelect);
+      }
+    });
+
+    // Display selected bus pass file name
+    busPassFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      uploadedBusPassFileName.textContent = file ? `Selected file: ${file.name}` : '';
+    });
+
+    // Fetch the current student profile and fill the form
+    async function loadStudentProfile() {
+      try {
+        const response = await fetch('/api/students/me', {
+          headers: { 'Accept': 'application/json' },
+          credentials: 'include'
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to load profile: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        if (!data.success || !data.student) {
+          throw new Error(data.message || 'No student data');
+        }
+
+        const student = data.student;
+
+        studentNameInput.value = student.studentName || '';
+        studentIdInput.value = student.studentId || '';
+        emailInput.value = student.email || '';
+        phoneInput.value = student.phone || '';
+        busPassNumberInput.value = student.busPassNumber || '';
+        validFromInput.value = student.validFrom ? new Date(student.validFrom).toISOString().slice(0,10) : '';
+        validToInput.value = student.validTo ? new Date(student.validTo).toISOString().slice(0,10) : '';
+        routeIdInput.value = student.routeId || '';
+        stopIdInput.value = student.stopId || '';
+
+        if (student.busPassFile && student.busPassFile.filename) {
+          uploadedBusPassFileName.textContent = `Current file: ${student.busPassFile.originalname || student.busPassFile.filename}`;
+        } else {
+          uploadedBusPassFileName.textContent = '';
+        }
+
+        if (student.program && deptOpts[student.program]) {
+          programSelect.value = student.program;
+          programSelect.dispatchEvent(new Event('change'));
+          // After programSelect is set and triggers department, year, section population:
+          if (student.department && deptOpts[student.program].includes(student.department)) {
+            departmentSelect.value = student.department;
+          }
+          if (student.year && yearOpts[student.program].includes(student.year)) {
+            yearSelect.value = student.year;
+          }
+          if (student.section && sectionOpts[student.program].includes(student.section)) {
+            sectionSelect.value = student.section;
+          }
+        } else {
+          resetSelect(departmentSelect);
+          resetSelect(yearSelect);
+          resetSelect(sectionSelect);
+        }
+
+      } catch(err) {
+        alert('Could not load student profile. Please refresh or try later.');
+        console.error(err);
+      }
+    }
+
+    // Submit updated profile data
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!form.checkValidity()) {
+        alert('Please fill out all required fields correctly.');
+        return;
+      }
+
+      try {
+        const formData = new FormData();
+
+        formData.append('studentName', studentNameInput.value.trim());
+        formData.append('program', programSelect.value);
+        formData.append('department', departmentSelect.value);
+        formData.append('year', yearSelect.value);
+        formData.append('section', sectionSelect.value);
+        formData.append('email', emailInput.value.trim());
+        formData.append('phone', phoneInput.value.trim());
+        formData.append('busPassNumber', busPassNumberInput.value.trim());
+        formData.append('validFrom', validFromInput.value);
+        formData.append('validTo', validToInput.value);
+        formData.append('routeId', routeIdInput.value.trim());
+        formData.append('stopId', stopIdInput.value.trim());
+
+        if (busPassFileInput.files.length > 0) {
+          formData.append('busPassFile', busPassFileInput.files[0]);
+        }
+
+        const studentId = studentIdInput.value.trim();
+
+        const response = await fetch(`/api/students/${encodeURIComponent(studentId)}`, {
+          method: 'PUT',
+          body: formData,
+          credentials: 'include'
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          alert('Profile updated successfully!');
+          // Update local storage record if needed
+          if(result.student) {
+            localStorage.setItem('student', JSON.stringify(result.student));
+          }
+          window.location.href = 'j.html';
+        } else {
+          alert('Update failed: ' + (result.message || 'Unknown error'));
+          console.error('Error updating student:', result);
+        }
+      } catch(err) {
+        alert('An error occurred while updating profile.');
+        console.error(err);
+      }
+    });
+
+    // Cancel button to abort and return to profile page
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      if (confirm('Discard changes and return to profile view?')) {
+        window.location.href = 'j.html';
+      }
+    });
+
+    populateProgramOptions();
+    loadStudentProfile();
+
+    document.documentElement.classList.remove('loading');
+  });
+</script>
+
+</body>
+</html>
